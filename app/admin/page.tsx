@@ -140,8 +140,8 @@ export default function AdminPage() {
       {/* Header */}
       <div className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex items-center gap-8">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center py-4 md:h-20 gap-4">
+            <div className="flex justify-between items-center w-full md:w-auto">
               <div className="flex items-center gap-2">
                 <div className="bg-blue-600 p-1.5 rounded-lg">
                   <CarIcon className="w-5 h-5 text-white" />
@@ -149,50 +149,59 @@ export default function AdminPage() {
                 <span className="text-xl font-bold tracking-tight text-gray-900">DjaCar <span className="text-blue-600">Admin</span></span>
               </div>
               
-              <nav className="hidden md:flex items-center gap-2">
-                <button
-                  onClick={() => setActiveTab('fleet')}
-                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-2 ${
-                    activeTab === 'fleet' 
-                      ? 'bg-blue-50 text-blue-600' 
-                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
-                >
-                  <LayoutGrid className="w-4 h-4" />
-                  Gestion Flotte
-                </button>
-                <button
-                  onClick={() => setActiveTab('locations')}
-                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-2 ${
-                    activeTab === 'locations' 
-                      ? 'bg-blue-50 text-blue-600' 
-                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
-                >
-                  <MapPin className="w-4 h-4" />
-                  Lieux de Prise en Charge
-                </button>
-                <button
-                  onClick={() => setActiveTab('settings')}
-                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-2 ${
-                    activeTab === 'settings' 
-                      ? 'bg-blue-50 text-blue-600' 
-                      : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-                  }`}
-                >
-                  <Settings className="w-4 h-4" />
-                  Configuration
-                </button>
-              </nav>
+              <Button
+                onClick={handleLogout}
+                variant="ghost"
+                size="icon"
+                className="md:hidden text-gray-500"
+              >
+                <LogOut className="w-5 h-5" />
+              </Button>
             </div>
+            
+            <nav className="flex items-center gap-1 md:gap-2 overflow-x-auto no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
+              <button
+                onClick={() => setActiveTab('fleet')}
+                className={`whitespace-nowrap px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-2 ${
+                  activeTab === 'fleet' 
+                    ? 'bg-blue-50 text-blue-600' 
+                    : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                <LayoutGrid className="w-4 h-4" />
+                Gestion Flotte
+              </button>
+              <button
+                onClick={() => setActiveTab('locations')}
+                className={`whitespace-nowrap px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-2 ${
+                  activeTab === 'locations' 
+                    ? 'bg-blue-50 text-blue-600' 
+                    : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                <MapPin className="w-4 h-4" />
+                Lieux / Adresses
+              </button>
+              <button
+                onClick={() => setActiveTab('settings')}
+                className={`whitespace-nowrap px-4 py-2 rounded-lg font-medium text-sm transition-all flex items-center gap-2 ${
+                  activeTab === 'settings' 
+                    ? 'bg-blue-50 text-blue-600' 
+                    : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                <Settings className="w-4 h-4" />
+                Configuration
+              </button>
+            </nav>
             
             <Button
               onClick={handleLogout}
               variant="outline"
-              className="flex items-center gap-2 rounded-xl border-gray-200 text-gray-600 hover:bg-gray-50"
+              className="hidden md:flex items-center gap-2 rounded-xl border-gray-200 text-gray-600 hover:bg-gray-50"
             >
               <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline">Déconnexion</span>
+              <span>Déconnexion</span>
             </Button>
           </div>
         </div>
@@ -204,14 +213,14 @@ export default function AdminPage() {
           <>
             <div className="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">Ma Flotte</h2>
-                <p className="text-gray-500 mt-1">
+                <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">Ma Flotte</h2>
+                <p className="text-gray-500 mt-1 text-sm md:text-base">
                   Vous avez <span className="font-bold text-gray-900">{cars.length}</span> véhicule{cars.length > 1 ? 's' : ''} dans votre inventaire.
                 </p>
               </div>
               <Button
                 onClick={() => setShowForm(true)}
-                className="bg-blue-600 text-white hover:bg-blue-700 rounded-xl px-6 py-6 font-bold shadow-lg shadow-blue-100"
+                className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 rounded-xl px-6 py-6 font-bold shadow-lg shadow-blue-100"
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Ajouter un Véhicule
