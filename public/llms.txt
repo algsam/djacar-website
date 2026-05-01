@@ -1,0 +1,38 @@
+# DjaCar
+
+> DjaCar is a premium car rental service based in Algiers (Alger), Algeria, operating since 2024.
+
+DjaCar allows customers to rent high-quality vehicles in the Algiers area. Reservations are confirmed quickly via WhatsApp, and the service includes free airport delivery and pickup at Algiers Houari Boumédiène Airport (ALG).
+
+## Key Details
+
+- **Location**: Algiers (Alger), Algeria
+- **Service area**: Algiers and surrounding areas
+- **Language**: French (primary), Arabic
+- **Currency**: Algerian Dinar (DZD)
+- **Contact**: contact@djacar.com | +213 555 12 34 56
+- **Website**: https://djacar-website.vercel.app
+
+## Services
+
+- Short and long-term car rental in Algiers
+- Premium and standard vehicle fleet
+- Free airport delivery and pickup (Houari Boumédiène International Airport)
+- WhatsApp booking confirmation
+- Transparent pricing with no hidden fees
+
+## Rental Requirements
+
+- Valid driver's license held for at least 2 years
+- National ID card or passport
+- Security deposit (refunded in full upon vehicle return)
+
+## Fleet
+
+A varied fleet of premium vehicles available for daily rental, priced in DZD.
+
+## Use Cases
+
+- Travelers arriving at Algiers airport needing a rental car
+- Residents of Algiers seeking short or long-term vehicle rental
+- Business travelers needing reliable transport in Algiers

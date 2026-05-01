@@ -26,3 +26,7 @@ yarn-error.log*
 # system files
 .DS_Store
 *.pem
+
+# tool specific folders
+.claude/
+.gemini/
