@@ -14,14 +14,14 @@ interface DateSelectorProps {
 }
 
 export function DateSelector({ onDatesChange }: DateSelectorProps) {
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  const startDateDefault = new Date();
+  startDateDefault.setDate(startDateDefault.getDate() - 5);
 
-  const dayAfter = new Date(tomorrow);
-  dayAfter.setDate(dayAfter.getDate() + 1);
+  const endDateDefault = new Date();
+  endDateDefault.setDate(endDateDefault.getDate() - 4);
 
-  const [startDate, setStartDate] = useState<string>(format(tomorrow, 'yyyy-MM-dd'));
-  const [endDate, setEndDate] = useState<string>(format(dayAfter, 'yyyy-MM-dd'));
+  const [startDate, setStartDate] = useState<string>(format(startDateDefault, 'yyyy-MM-dd'));
+  const [endDate, setEndDate] = useState<string>(format(endDateDefault, 'yyyy-MM-dd'));
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [agencySettings, setAgencySettings] = useState<AgencySettings | null>(null);
