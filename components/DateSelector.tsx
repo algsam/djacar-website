@@ -126,7 +126,7 @@ export function DateSelector({ onDatesChange }: DateSelectorProps) {
             onClick={handleDatesChange}
             className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-6 px-6 font-bold transition-all hover:shadow-lg hover:shadow-blue-200"
           >
-            Rechercher
+            Confirmer
           </Button>
         </div>
 

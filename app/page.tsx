@@ -72,7 +72,7 @@ export default function Home() {
 
   const handleBookCar = (car: Car) => {
     if (!startDate || !endDate) {
-      alert("Veuillez d'abord sélectionner vos dates de location dans la barre de recherche en haut de la page.");
+      alert("Veuillez d'abord confirmer vos dates de location dans la barre de recherche en haut de la page.");
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
