@@ -48,6 +48,20 @@ export function BookingModal({
       alert('Veuillez remplir au moins votre nom et votre numéro de téléphone.');
       return;
     }
+
+    // Check minimum rental days
+    if (agencySettings?.minRentalDays && startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const diffTime = Math.abs(end.getTime() - start.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1; // At least 1 day
+
+      if (diffDays < agencySettings.minRentalDays) {
+        alert(`Désolé, la durée minimum de location pour notre agence est de ${agencySettings.minRentalDays} jours. Votre sélection actuelle est de ${diffDays} jour(s). Veuillez choisir une période plus longue.`);
+        return;
+      }
+    }
+
     setStep(2);
   };
 

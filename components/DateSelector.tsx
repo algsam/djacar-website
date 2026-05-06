@@ -6,6 +6,8 @@ import { Calendar, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getLocations, initializeLocations } from '@/lib/locations';
 import { Location } from '@/types/location';
+import { getAgencySettings, AgencySettings } from '@/lib/settings';
+import { differenceInDays } from 'date-fns';
 
 interface DateSelectorProps {
   onDatesChange: (startDate: Date, endDate: Date, location: string) => void;
@@ -22,21 +24,40 @@ export function DateSelector({ onDatesChange }: DateSelectorProps) {
   const [endDate, setEndDate] = useState<string>(format(dayAfter, 'yyyy-MM-dd'));
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string>('');
+  const [agencySettings, setAgencySettings] = useState<AgencySettings | null>(null);
 
   useEffect(() => {
-    const fetchLocations = async () => {
+    const fetchData = async () => {
+      // Fetch locations
       await initializeLocations();
-      const data = await getLocations();
-      setLocations(data);
-      if (data.length > 0) {
-        setSelectedLocation(data[0].name);
+      const locData = await getLocations();
+      setLocations(locData);
+      if (locData.length > 0) {
+        setSelectedLocation(locData[0].name);
       }
+
+      // Fetch agency settings
+      const settingsData = await getAgencySettings();
+      setAgencySettings(settingsData);
     };
-    fetchLocations();
+    fetchData();
   }, []);
 
   const handleDatesChange = () => {
-    onDatesChange(new Date(startDate), new Date(endDate), selectedLocation);
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    
+    // Validate minimum rental days
+    if (agencySettings?.minRentalDays) {
+      const diffDays = differenceInDays(end, start);
+      
+      if (diffDays < agencySettings.minRentalDays) {
+        alert(`Désolé, la durée minimum de location pour notre agence est de ${agencySettings.minRentalDays} jours. Votre sélection actuelle est de ${diffDays} jour(s). Veuillez choisir une période plus longue.`);
+        return;
+      }
+    }
+
+    onDatesChange(start, end, selectedLocation);
   };
 
   return (

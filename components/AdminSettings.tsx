@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getAgencySettings, updateAgencySettings, AgencySettings } from '@/lib/settings';
 import { Button } from '@/components/ui/button';
-import { Phone, Save, Loader2, Info } from 'lucide-react';
+import { Phone, Save, Loader2, Info, Calendar, Percent, Plus, Trash2 } from 'lucide-react';
 
 export function AdminSettings() {
   const [settings, setSettings] = useState<AgencySettings | null>(null);
@@ -91,6 +91,112 @@ export function AdminSettings() {
               className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold"
               required
             />
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 ml-1">
+              Durée Minimum de Location (Jours)
+            </label>
+            <div className="relative">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                <Calendar className="w-5 h-5 text-blue-600" />
+              </div>
+              <input
+                type="number"
+                min="1"
+                value={settings?.minRentalDays || 1}
+                onChange={(e) => setSettings(prev => prev ? {...prev, minRentalDays: parseInt(e.target.value)} : null)}
+                className="w-full pl-16 pr-5 py-5 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-bold text-lg"
+                required
+              />
+            </div>
+            <div className="mt-3 flex items-start gap-2 text-xs text-gray-500 ml-1">
+              <Info className="w-4 h-4 text-blue-500 shrink-0" />
+              <p>Le nombre minimum de jours qu'un client peut réserver. Un message d'erreur s'affichera s'il choisit moins.</p>
+            </div>
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 ml-1">
+              Grille de Réductions (Durée)
+            </label>
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-gray-100/50 border-b border-gray-200 text-gray-500 uppercase text-[10px] font-bold tracking-widest">
+                  <tr>
+                    <th className="px-6 py-4">À partir de (Jours)</th>
+                    <th className="px-6 py-4">Réduction (%)</th>
+                    <th className="px-6 py-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {settings?.discounts?.sort((a, b) => a.days - b.days).map((tier, index) => (
+                    <tr key={index} className="bg-white hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4">
+                        <input
+                          type="number"
+                          value={tier.days}
+                          onChange={(e) => {
+                            const newDiscounts = [...(settings?.discounts || [])];
+                            newDiscounts[index].days = parseInt(e.target.value);
+                            setSettings(prev => prev ? {...prev, discounts: newDiscounts} : null);
+                          }}
+                          className="w-full bg-transparent outline-none font-bold text-gray-900 focus:text-blue-600"
+                        />
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="number"
+                            value={tier.discount}
+                            onChange={(e) => {
+                              const newDiscounts = [...(settings?.discounts || [])];
+                              newDiscounts[index].discount = parseInt(e.target.value);
+                              setSettings(prev => prev ? {...prev, discounts: newDiscounts} : null);
+                            }}
+                            className="w-16 bg-transparent outline-none font-bold text-green-600"
+                          />
+                          <span className="text-gray-400 font-bold">%</span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newDiscounts = settings?.discounts.filter((_, i) => i !== index);
+                            setSettings(prev => prev ? {...prev, discounts: newDiscounts || []} : null);
+                          }}
+                          className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {(settings?.discounts?.length || 0) < 5 && (
+                    <tr>
+                      <td colSpan={3} className="p-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newDiscounts = [...(settings?.discounts || []), { days: 0, discount: 0 }];
+                            setSettings(prev => prev ? {...prev, discounts: newDiscounts} : null);
+                          }}
+                          className="w-full py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-400 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50/50 transition-all flex items-center justify-center gap-2 font-bold text-sm"
+                        >
+                          <Plus className="w-4 h-4" />
+                          Ajouter un palier de réduction
+                        </button>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            <div className="mt-4 flex items-start gap-2 text-xs text-gray-500 ml-1">
+              <Percent className="w-4 h-4 text-green-500 shrink-0" />
+              <p>Les réductions seront appliquées automatiquement au total lors de la réservation.</p>
+            </div>
           </div>
         </div>
 

@@ -7,28 +7,34 @@ import { Hero } from '@/components/Hero';
 import { getCars, initializeCars } from '@/lib/cars';
 import { Car } from '@/types/car';
 import { format, differenceInDays } from 'date-fns';
-import { Plane, BadgeCheck, Clock, ShieldCheck, MapPin } from 'lucide-react';
+import { Plane, BadgeCheck, Clock, ShieldCheck, MapPin, Tag } from 'lucide-react';
+import { getAgencySettings, AgencySettings } from '@/lib/settings';
 
 export default function Home() {
   const [cars, setCars] = useState<Car[]>([]);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
+  const [agencySettings, setAgencySettings] = useState<AgencySettings | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadCars = async () => {
+    const loadData = async () => {
       try {
         await initializeCars();
-        const data = await getCars();
-        setCars(data);
+        const [carsData, settingsData] = await Promise.all([
+          getCars(),
+          getAgencySettings()
+        ]);
+        setCars(carsData);
+        setAgencySettings(settingsData);
       } catch (error) {
-        console.error('[v0] Error loading cars:', error);
+        console.error('[v0] Error loading data:', error);
       } finally {
         setLoading(false);
       }
     };
-    loadCars();
+    loadData();
   }, []);
 
   const handleDatesChange = (start: Date, end: Date, location: string) => {
@@ -41,6 +47,27 @@ export default function Home() {
     if (!startDate || !endDate) return 1;
     const days = differenceInDays(endDate, startDate);
     return Math.max(1, days);
+  };
+
+  const calculateTotalPrice = (pricePerDay: number): number => {
+    const days = getDaysCount();
+    const baseTotal = pricePerDay * days;
+    
+    if (!agencySettings?.discounts || agencySettings.discounts.length === 0) {
+      return baseTotal;
+    }
+
+    // Find the applicable discount tier (highest days <= current days)
+    const applicableTier = [...agencySettings.discounts]
+      .sort((a, b) => b.days - a.days)
+      .find(tier => days >= tier.days);
+
+    if (applicableTier) {
+      const discountAmount = (baseTotal * applicableTier.discount) / 100;
+      return baseTotal - discountAmount;
+    }
+
+    return baseTotal;
   };
 
   const handleBookCar = (car: Car) => {
@@ -124,6 +151,7 @@ export default function Home() {
                   key={car.id}
                   car={car}
                   daysCount={getDaysCount()}
+                  totalPrice={calculateTotalPrice(car.pricePerDay)}
                   onBook={handleBookCar}
                   isAvailable={!car.inMaintenance}
                 />
@@ -171,7 +199,7 @@ export default function Home() {
           car={selectedCar}
           startDate={format(startDate, 'MMM dd, yyyy')}
           endDate={format(endDate, 'MMM dd, yyyy')}
-          totalPrice={selectedCar.pricePerDay * getDaysCount()}
+          totalPrice={calculateTotalPrice(selectedCar.pricePerDay)}
           onClose={() => setSelectedCar(null)}
         />
       )}

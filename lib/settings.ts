@@ -5,9 +5,16 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 
+export interface DiscountTier {
+  days: number;
+  discount: number; // percentage
+}
+
 export interface AgencySettings {
   whatsappNumber: string;
   agencyName: string;
+  minRentalDays: number;
+  discounts: DiscountTier[];
 }
 
 const SETTINGS_COLLECTION = 'settings';
@@ -24,7 +31,15 @@ export const getAgencySettings = async (): Promise<AgencySettings> => {
       // Default settings
       const defaultSettings: AgencySettings = {
         whatsappNumber: '213555123456',
-        agencyName: 'DjaCar'
+        agencyName: 'DjaCar',
+        minRentalDays: 2,
+        discounts: [
+          { days: 3, discount: 5 },
+          { days: 7, discount: 10 },
+          { days: 15, discount: 15 },
+          { days: 30, discount: 20 },
+          { days: 60, discount: 25 }
+        ]
       };
       await setDoc(docRef, defaultSettings);
       return defaultSettings;
@@ -33,7 +48,9 @@ export const getAgencySettings = async (): Promise<AgencySettings> => {
     console.error('Error fetching settings:', error);
     return {
       whatsappNumber: '213555123456',
-      agencyName: 'DjaCar'
+      agencyName: 'DjaCar',
+      minRentalDays: 2,
+      discounts: []
     };
   }
 };

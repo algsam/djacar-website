@@ -8,12 +8,15 @@ import { Users, Gauge, Fuel, Calendar as CalendarIcon, ShieldCheck } from 'lucid
 interface CarCardProps {
   car: Car;
   daysCount: number;
+  totalPrice: number;
   onBook: (car: Car, days: number) => void;
   isAvailable: boolean;
 }
 
-export function CarCard({ car, daysCount, onBook, isAvailable }: CarCardProps) {
-  const totalPrice = car.pricePerDay * daysCount;
+export function CarCard({ car, daysCount, totalPrice, onBook, isAvailable }: CarCardProps) {
+  const baseTotal = car.pricePerDay * daysCount;
+  const hasDiscount = totalPrice < baseTotal;
+  const discountPercentage = hasDiscount ? Math.round(((baseTotal - totalPrice) / baseTotal) * 100) : 0;
 
   return (
     <div className="group bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl hover:shadow-blue-100 transition-all duration-300 flex flex-col h-full">
@@ -27,7 +30,7 @@ export function CarCard({ car, daysCount, onBook, isAvailable }: CarCardProps) {
         />
         
         {/* Availability Badge */}
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-4 right-4 flex flex-col gap-2 items-end">
           {isAvailable ? (
             <span className="bg-green-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
               Disponible
@@ -35,6 +38,11 @@ export function CarCard({ car, daysCount, onBook, isAvailable }: CarCardProps) {
           ) : (
             <span className="bg-red-500/90 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
               Maintenance
+            </span>
+          )}
+          {hasDiscount && (
+            <span className="bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-lg animate-pulse">
+              -{discountPercentage}% Promo
             </span>
           )}
         </div>
@@ -88,6 +96,9 @@ export function CarCard({ car, daysCount, onBook, isAvailable }: CarCardProps) {
               {daysCount} Jours au total
             </div>
             <div className="text-right">
+              {hasDiscount && (
+                <p className="text-[10px] text-gray-400 line-through font-bold mb-0.5">{baseTotal} DZD</p>
+              )}
               <span className="text-lg font-bold text-gray-900">{totalPrice} DZD</span>
             </div>
           </div>
