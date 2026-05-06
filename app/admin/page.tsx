@@ -16,6 +16,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState('');
   const [cars, setCars] = useState<Car[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [editingCar, setEditingCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'fleet' | 'locations' | 'settings'>('fleet');
 
@@ -62,12 +63,23 @@ export default function AdminPage() {
 
   const handleAddCar = async (newCar: Omit<Car, 'id'>) => {
     try {
-      await addCar(newCar);
+      if (editingCar) {
+        await updateCar(editingCar.id, newCar);
+      } else {
+        await addCar(newCar);
+      }
       await loadCars();
+      setShowForm(false);
+      setEditingCar(null);
     } catch (error) {
-      console.error('[v0] Error adding car:', error);
+      console.error('[v0] Error saving car:', error);
       throw error;
     }
+  };
+
+  const handleEditCar = (car: Car) => {
+    setEditingCar(car);
+    setShowForm(true);
   };
 
   const handleToggleMaintenance = async (id: string, inMaintenance: boolean) => {
@@ -251,6 +263,7 @@ export default function AdminPage() {
                 cars={cars}
                 onToggleMaintenance={handleToggleMaintenance}
                 onDelete={handleDeleteCar}
+                onEdit={handleEditCar}
                 loading={loading}
               />
             )}
@@ -271,7 +284,11 @@ export default function AdminPage() {
       {showForm && (
         <AdminCarForm
           onSubmit={handleAddCar}
-          onClose={() => setShowForm(false)}
+          onClose={() => {
+            setShowForm(false);
+            setEditingCar(null);
+          }}
+          initialData={editingCar}
         />
       )}
     </div>
