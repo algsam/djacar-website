@@ -87,10 +87,10 @@ Merci de me confirmer la disponibilité.`;
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
-      <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-gray-100">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-50 animate-in fade-in duration-300 overflow-y-auto">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[95vh] sm:max-h-[90vh] flex flex-col overflow-hidden border border-gray-100 my-auto">
         {/* Header */}
-        <div className="flex justify-between items-center p-8 border-b border-gray-100 bg-gray-50/50">
+        <div className="flex justify-between items-center p-6 md:p-8 border-b border-gray-100 bg-gray-50/50 flex-none">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
               {step === 1 ? 'Détails de réservation' : 'Confirmation'}
@@ -108,7 +108,7 @@ Merci de me confirmer la disponibilité.`;
         </div>
 
         {/* Content */}
-        <div className="p-8">
+        <div className="p-6 md:p-8 overflow-y-auto flex-1 custom-scrollbar">
           {step === 1 ? (
             <div className="space-y-6">
               <div className="grid grid-cols-1 gap-5">
@@ -226,7 +226,7 @@ Merci de me confirmer la disponibilité.`;
         </div>
 
         {/* Footer */}
-        <div className="p-8 border-t border-gray-100 bg-gray-50/50 flex gap-4">
+        <div className="p-6 md:p-8 border-t border-gray-100 bg-gray-50/50 flex gap-4 flex-none">
           {step === 2 ? (
             <button
               onClick={() => setStep(1)}
