@@ -49,6 +49,7 @@ export function AdminCarGrid({
               <p>Price per Day: ${car.pricePerDay}</p>
               <p>Seats: {car.seats}</p>
               <p>Transmission: {car.transmission}</p>
+              <p>Carburant: {car.fuelType || 'N/A'}</p>
             </div>
 
             <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">

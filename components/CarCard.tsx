@@ -81,7 +81,7 @@ export function CarCard({ car, daysCount, totalPrice, onBook, isAvailable }: Car
           </div>
           <div className="flex items-center space-x-2 bg-gray-50 p-2 rounded-xl">
             <Fuel className="w-4 h-4 text-blue-500" />
-            <span className="text-xs font-semibold text-gray-600">Diesel</span>
+            <span className="text-xs font-semibold text-gray-600">{car.fuelType || 'Diesel'}</span>
           </div>
           <div className="flex items-center space-x-2 bg-gray-50 p-2 rounded-xl">
             <ShieldCheck className="w-4 h-4 text-blue-500" />

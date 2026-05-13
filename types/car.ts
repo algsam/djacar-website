@@ -7,6 +7,7 @@ export interface Car {
   image: string;
   seats: number;
   transmission: string;
+  fuelType?: 'Diesel' | 'Essence';
   inMaintenance: boolean;
 }
 

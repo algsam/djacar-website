@@ -26,6 +26,7 @@ export function AdminCarForm({ onSubmit, onClose, initialData }: AdminCarFormPro
     image: initialData?.image || '',
     seats: initialData?.seats || 5,
     transmission: initialData?.transmission || 'Automatic',
+    fuelType: initialData?.fuelType || 'Diesel',
     inMaintenance: initialData?.inMaintenance || false,
   });
 
@@ -93,6 +94,7 @@ export function AdminCarForm({ onSubmit, onClose, initialData }: AdminCarFormPro
         image: '',
         seats: 5,
         transmission: 'Automatic',
+        fuelType: 'Diesel',
         inMaintenance: false,
       });
       onClose();
@@ -200,6 +202,21 @@ export function AdminCarForm({ onSubmit, onClose, initialData }: AdminCarFormPro
               >
                 <option value="Automatic">Automatique</option>
                 <option value="Manual">Manuelle</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
+                Type de Carburant
+              </label>
+              <select
+                name="fuelType"
+                value={formData.fuelType}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none"
+              >
+                <option value="Diesel">Diesel</option>
+                <option value="Essence">Essence</option>
               </select>
             </div>
           </div>

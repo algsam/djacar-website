@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Car } from '@/types/car';
 import { Button } from '@/components/ui/button';
-import { X, CheckCircle2, MessageSquare, ArrowRight, User, Phone, Mail } from 'lucide-react';
+import { X, CheckCircle2, MessageSquare, ArrowRight, User } from 'lucide-react';
 import { getAgencySettings, AgencySettings } from '@/lib/settings';
 
 interface BookingModalProps {
@@ -25,8 +25,6 @@ export function BookingModal({
   const [agencySettings, setAgencySettings] = useState<AgencySettings | null>(null);
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
-    email: '',
   });
 
   useEffect(() => {
@@ -44,8 +42,8 @@ export function BookingModal({
   };
 
   const handleProceedToWhatsApp = () => {
-    if (!formData.name || !formData.phone) {
-      alert('Veuillez remplir au moins votre nom et votre numéro de téléphone.');
+    if (!formData.name) {
+      alert('Veuillez remplir votre nom.');
       return;
     }
 
@@ -71,10 +69,8 @@ export function BookingModal({
 
     const message = `Bonjour ${agencyName}! Je souhaite réserver un véhicule:
     
-🚗 Véhicule: ${car.name} ${car.model}
+🚗 Véhicule: ${car.name} ${car.model} (${car.fuelType || 'Diesel'})
 👤 Client: ${formData.name}
-📱 Tél: ${formData.phone}
-📧 Email: ${formData.email || 'Non précisé'}
 📅 Début: ${startDate}
 📅 Fin: ${endDate}
 💰 Prix Total: ${totalPrice} DZD
@@ -124,40 +120,6 @@ Merci de me confirmer la disponibilité.`;
                       value={formData.name}
                       onChange={handleInputChange}
                       placeholder="Votre nom"
-                      className="w-full pl-12 pr-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                    />
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">
-                    Numéro de Téléphone
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      placeholder="+213 --- -- -- --"
-                      className="w-full pl-12 pr-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                    />
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">
-                    Email (Optionnel)
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder="votre@email.com"
                       className="w-full pl-12 pr-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                     />
                   </div>
